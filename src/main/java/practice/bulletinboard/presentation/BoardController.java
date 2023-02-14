@@ -2,6 +2,8 @@ package practice.bulletinboard.presentation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +20,12 @@ public class BoardController {
         return mav;
     }
     @PostMapping("/board")
-    public String postComment(@ModelAttribute CommentForm comment){
-        return "board";
+    public ModelAndView postComment(@Validated @ModelAttribute CommentForm comment, BindingResult result){
+        if(result.hasErrors()) {
+            ModelAndView mav = new ModelAndView("/board");
+            mav.addObject("commentForm", comment);
+            return mav;
+        }
+        return new ModelAndView("redirect:/board");
     }
 }
