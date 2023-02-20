@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import practice.bulletinboard.application.form.CommentForm;
 import practice.bulletinboard.application.usecase.UserCommentUseCase;
+import practice.bulletinboard.domain.model.UserComments;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,7 +18,15 @@ public class BoardController {
     private final UserCommentUseCase userCommentUseCase;
 
     @GetMapping("/board")
-    public ModelAndView viewBoard(ModelAndView mav) {
+/*    public ModelAndView viewBoard(ModelAndView mav) {
+        mav.setViewName("board");
+        mav.addObject("commentForm", new CommentForm());
+        return mav;
+    }*/
+    public ModelAndView viewBoard(ModelAndView mav){
+        UserComments userComments = userCommentUseCase.read();
+        mav.addObject("comments",userComments.getValues());
+
         mav.setViewName("board");
         mav.addObject("commentForm", new CommentForm());
         return mav;
